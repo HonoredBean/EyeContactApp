@@ -12,6 +12,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() { 
     super.initState();
@@ -45,7 +46,7 @@ class _HomePageState extends State<HomePage> {
             Icons.add_a_photo
           ),
         ),
-        onPressed: (){},
+        onPressed: () => onPickImageSelected(context, scaffoldKey, "CAMERA_SOURCE"),
       ), 
     );
   }

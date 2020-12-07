@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:eyecontactapp/src/pages/homePage.dart';
+import 'package:eyecontactapp/src/pages/scanPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:local_auth/auth_strings.dart';
 import 'package:local_auth/local_auth.dart';
 
@@ -68,4 +70,32 @@ void signOut(GoogleSignIn googleSignIn){
   googleSignIn.signOut();
   print("Cerrando sesion");
   exit(0);
+}
+
+void onPickImageSelected(BuildContext context, GlobalKey<ScaffoldState> scaffoldKey, String source) async {
+  var imageSource;
+  if (source == "CAMERA_SOURCE") {
+    imageSource = ImageSource.camera;
+  } else {
+    imageSource = ImageSource.gallery;
+  }
+
+  final scaffold = scaffoldKey.currentState;
+  final picker = ImagePicker();
+  try {
+    final file = await picker.getImage(source: imageSource);
+    if (file == null) {
+      throw Exception('File is not available');
+    }
+    String _selectedScanner = "TEXT_SCANNER";
+    Navigator.push(
+      context,
+      new MaterialPageRoute(
+          builder: (context) => ScanPage(file, _selectedScanner)),
+    );
+  } catch (e) {
+    scaffold.showSnackBar(SnackBar(
+      content: Text(e.toString()),
+    ));
+  }
 }
