@@ -24,6 +24,7 @@ class _HomePageState extends State<HomePage> {
         title: Text(widget.authResult.user.displayName),
         actions: [
           FloatingActionButton(
+            heroTag: "ht1",
             child: CircleAvatar(
               child: Icon(
                 Icons.exit_to_app
@@ -36,6 +37,7 @@ class _HomePageState extends State<HomePage> {
       body: Container(
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: "ht2",
         backgroundColor: Colors.black45,
         child: CircleAvatar(
           backgroundColor: Colors.white,
@@ -43,7 +45,7 @@ class _HomePageState extends State<HomePage> {
             Icons.add_a_photo
           ),
         ),
-        onPressed: (){}
+        onPressed: (){},
       ), 
     );
   }

@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "929129225390-ur3jh59mb3ks5tj9eehk7bcl20jlkovs.apps.googleusercontent.com",
+          "client_id": "929129225390-pbpnr6ri70cvaqu0olo94v3pl690ereh.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.eyecontactapp",
-            "certificate_hash": "d0f5afd8b9f48efbda7df9a33fa35cd93005d31e"
+            "certificate_hash": "33c56c4abbcfa0253eb0f60d295e71080bc65499"
           }
         },
         {
