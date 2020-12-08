@@ -2,8 +2,8 @@
     package="com.example.eyecontactapp">
    <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
    <application
-        android:label="eyecontactapp"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Eye Contact"
+        android:icon="@mipmap/eye_contact">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

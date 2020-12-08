@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
                 Icons.exit_to_app
               ),
             ),
-            onPressed: () => signOut(widget.googleSignIn), 
+            onPressed: ()=>signOut(widget.googleSignIn),
           ),
         ],
       ),

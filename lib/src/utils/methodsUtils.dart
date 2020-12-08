@@ -68,8 +68,6 @@ void signIn(BuildContext context, FirebaseAuth auth, GoogleSignIn googleSignIn) 
 
 void signOut(GoogleSignIn googleSignIn){
   googleSignIn.signOut();
-  print("Cerrando sesion");
-  exit(0);
 }
 
 void onPickImageSelected(BuildContext context, GlobalKey<ScaffoldState> scaffoldKey, String source) async {
