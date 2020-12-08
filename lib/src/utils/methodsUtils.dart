@@ -67,7 +67,7 @@ void signIn(BuildContext context, FirebaseAuth auth, GoogleSignIn googleSignIn) 
 }
 
 void signOut(GoogleSignIn googleSignIn){
-  googleSignIn.signOut();
+  googleSignIn.signOut().whenComplete(() => exit(0));
 }
 
 void onPickImageSelected(BuildContext context, GlobalKey<ScaffoldState> scaffoldKey, String source) async {
