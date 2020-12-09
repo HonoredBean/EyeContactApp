@@ -24,9 +24,17 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text(widget.authResult.user.displayName),
+          title: Text(
+            "Bienvenido "+widget.authResult.user.displayName,
+            style: TextStyle(
+              fontSize: 18
+            ),
+          ),
         ),
-        drawer: MenuWidget(widget.authResult, widget.googleSignIn),
+        drawer: menuDrawer(
+          widget.authResult, 
+          widget.googleSignIn
+        ),
         body: Container(
         ),
         floatingActionButton: Column(
