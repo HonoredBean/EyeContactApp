@@ -3,19 +3,28 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-Drawer menuDrawer(AuthResult authResult, GoogleSignIn googleSignIn){
+Drawer menuDrawer(BuildContext context, AuthResult authResult, GoogleSignIn googleSignIn){
   return Drawer(
     child: Container(
       child: ListView(
         children: [
           basicData(authResult),
           itemList(
+            context,
             "MENU", 
             Icon(Icons.menu), 
+            googleSignIn, 
+            0
+          ),
+          itemList(
+            context,
+            "Cambiar de cuenta", 
+            Icon(Icons.account_circle), 
             googleSignIn, 
             1
           ),
           itemList(
+            context,
             "Salir", 
             Icon(Icons.exit_to_app), 
             googleSignIn, 
@@ -59,15 +68,16 @@ Widget basicData(AuthResult authResult){
   );
 }
 
-Widget itemList(String text, Icon icono, GoogleSignIn googleSignIn , int value){
+Widget itemList(BuildContext context,String text, Icon icono, GoogleSignIn googleSignIn , int value){
   return ListTile(
     onTap: (){
       switch (value) {
         case 1:
-          signOut(googleSignIn);
+          FirebaseAuth auth = FirebaseAuth.instance;
+          signOutReturn(context, auth, googleSignIn);
         break;
         case 2:
-          print("Presiono");
+          signOut(googleSignIn);
         break;
         default:
       }

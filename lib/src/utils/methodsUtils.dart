@@ -4,6 +4,7 @@ import 'package:eyecontactapp/src/pages/homePage.dart';
 import 'package:eyecontactapp/src/pages/scanPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:local_auth/auth_strings.dart';
@@ -67,7 +68,11 @@ void signIn(BuildContext context, FirebaseAuth auth, GoogleSignIn googleSignIn) 
 }
 
 void signOut(GoogleSignIn googleSignIn){
-  googleSignIn.signOut().whenComplete(() => exit(0));
+  googleSignIn.signOut().whenComplete(() => SystemChannels.platform.invokeMethod('SystemNavigator.pop'));
+}
+
+void signOutReturn(BuildContext context, FirebaseAuth auth, GoogleSignIn googleSignIn){
+  googleSignIn.signOut().whenComplete(() => signIn(context, auth, googleSignIn));
 }
 
 void onPickImageSelected(BuildContext context, GlobalKey<ScaffoldState> scaffoldKey, String source) async {
