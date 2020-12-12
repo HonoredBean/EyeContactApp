@@ -6,6 +6,33 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mlkit/mlkit.dart';
 
+Widget buildTextList(BuildContext context, List<VisionText> texts) {
+  if (texts.length == 0) {
+    return Expanded(
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: Text(
+          "No hay texto valido",
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold
+          ),
+        ),
+      ),
+    );
+  }
+  return Expanded(
+    child: Container(
+      child: ListView.builder(
+        itemCount: texts.length,
+        itemBuilder: (context, i) {
+          return buildTextRow(texts[i].text);
+        }
+      ),
+    ),
+  );
+}
+
 Widget buildTextRow(text) {
   return ListTile(
     title: Text(
@@ -19,63 +46,37 @@ Widget buildTextRow(text) {
   );
 }
 
-Widget buildTextList(BuildContext context, List<VisionText> texts) {
-  if (texts.length == 0) {
-    return Expanded(
-      flex: 1,
-      child: Center(
-        child: Text(
-          'No text detected',
-          style: Theme.of(context).textTheme.subtitle1
-        ),
-      )
-    );
-  }
-  return Expanded(
-    flex: 1,
-    child: Container(
-      child: ListView.builder(
-        padding: const EdgeInsets.all(0.5),
-        itemCount: texts.length,
-        itemBuilder: (context, i) {
-          return buildTextRow(texts[i].text);
-        }
-      ),
-    ),
-  );
-}
 Widget buildImage(PickedFile file, List<VisionText> currentTextLabels, BuildContext context) {
-  return Expanded(
-    flex: 2,
-    child: Container(
-      decoration: BoxDecoration(color: Colors.black),
-      child: Center(
-        child: file == null ? Text('No Image') : FutureBuilder<Size>(
-          future: getImageSize(
-            Image.file(
-              File(file.path), 
-              fit: BoxFit.fitWidth
-            )
-          ),
-          builder: (BuildContext context, AsyncSnapshot<Size> snapshot) {
-            if (snapshot.hasData) {
-              return Container(
-                foregroundDecoration: TextDetectDecoration(
-                  currentTextLabels, 
-                  snapshot.data
-                ),
-                child: Image.file(
-                  File(file.path), 
-                  fit: BoxFit.fitWidth
-                )
-              );
-            } else {
-              return CircularProgressIndicator();
-            }
-          },
+  return Container(
+    height: MediaQuery.of(context).size.height/2,
+    width: MediaQuery.of(context).size.width,
+    decoration: BoxDecoration(color: Colors.black),
+    child: Center(
+      child: file == null ? Text('No Image') : FutureBuilder<Size>(
+        future: getImageSize(
+          Image.file(
+            File(file.path), 
+            fit: BoxFit.cover
+          )
         ),
-      )
-    ),
+        builder: (BuildContext context, AsyncSnapshot<Size> snapshot) {
+          if (snapshot.hasData) {
+            return Container(
+              foregroundDecoration: TextDetectDecoration(
+                currentTextLabels, 
+                snapshot.data
+              ),
+              child: Image.file(
+                File(file.path), 
+                fit: BoxFit.cover
+              )
+            );
+          } else {
+            return CircularProgressIndicator();
+          }
+        },
+      ),
+    )
   );
 }
 Future<Size> getImageSize(Image image) {

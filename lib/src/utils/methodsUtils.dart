@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eyecontactapp/src/pages/homePage.dart';
 import 'package:eyecontactapp/src/pages/scanPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -55,6 +56,7 @@ void signIn(BuildContext context, FirebaseAuth auth, GoogleSignIn googleSignIn) 
   );
   final AuthResult authResult = await auth.signInWithCredential(credential);
   FirebaseUser user = authResult.user;
+  addUser(user);
   print("signed in " + user.displayName);
   Navigator.pushReplacement(
     context, 
@@ -100,5 +102,25 @@ void onPickImageSelected(BuildContext context, GlobalKey<ScaffoldState> scaffold
     scaffold.showSnackBar(SnackBar(
       content: Text(e.toString()),
     ));
+  }
+}
+
+Future<void> addUser(FirebaseUser user) async {
+  Map<String, dynamic> map = {"id" : user.uid, "name" : user.displayName, "email" : user.email};
+  CollectionReference collectionReference = Firestore.instance.collection('Users');
+  QuerySnapshot document = await Firestore.instance.collection('Users').where("email", isEqualTo: user.email).getDocuments();
+  var documents = document.documents;
+  if (documents.isEmpty) {
+    collectionReference.add(map);
+  }
+}
+
+Future<void> addDocument(FirebaseUser user, String text) async {
+  Map<String, dynamic> map = {"Texto" : text, "Fecha " : DateTime.now(), "name" : user.displayName, "email" : user.email};
+  CollectionReference collectionReference = Firestore.instance.collection('Users');
+  QuerySnapshot document = await Firestore.instance.collection('Users').where("email", isEqualTo: user.email).getDocuments();
+  var documents = document.documents;
+  if (documents.isEmpty) {
+    collectionReference.add(map);
   }
 }

@@ -36,8 +36,32 @@ class _HomePageState extends State<HomePage> {
           widget.authResult, 
           widget.googleSignIn
         ),
-        body: Container(
-        ),
+        /*body: StreamBuilder(
+          stream: Firestore.instance.collection("FilesByUsers").snapshots(),
+          builder: (context,AsyncSnapshot<QuerySnapshot>snapshot){
+            if (!snapshot.hasData) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ],
+              );
+            }
+            return ListView(
+              children: snapshot.data.documents.map((document){
+                return Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width/1.2,
+                    height: MediaQuery.of(context).size.height/6,
+                    child: Text("Nombre: "+document["name"]),
+                  ),
+                );
+              }).toList(),
+            );
+          },
+        )*/
         floatingActionButton: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
