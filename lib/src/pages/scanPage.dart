@@ -67,7 +67,7 @@ class _ScanPageState extends State<ScanPage> {
           ),
           RaisedButton.icon(
             onPressed: (){
-              addDoc(widget.user, currentTextLabels);
+              addDoc(context, widget.user, currentTextLabels);
             },
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10))

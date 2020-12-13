@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:local_auth/auth_strings.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:mlkit/mlkit.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 Future <void> biometrico(BuildContext context ,bool bandera, LocalAuthentication auth) async {
   if(bandera){
@@ -113,7 +114,7 @@ Future<void> addUser(FirebaseUser user) async {
   }
 }
 
-Future<void> addDoc(FirebaseUser user, List<VisionText> text) async {
+Future<void> addDoc(BuildContext context, FirebaseUser user, List<VisionText> text) async {
   String salidaTexto = "";
   for (var item in text) {
     salidaTexto += item.text;
@@ -126,4 +127,39 @@ Future<void> addDoc(FirebaseUser user, List<VisionText> text) async {
   if (documents.isNotEmpty) {
     collectionReference.add(map);
   }
+  var alertStyle = AlertStyle(
+    animationType: AnimationType.fromTop,
+    isCloseButton: false,
+    isOverlayTapDismiss: false,
+    descStyle: TextStyle(fontWeight: FontWeight.bold),
+    animationDuration: Duration(milliseconds: 400),
+    alertBorder: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(0.0),
+      side: BorderSide(
+        color: Colors.grey,
+      ),
+    ),
+    titleStyle: TextStyle(
+      color: Colors.red,
+    ),
+  );
+
+  Alert(
+    context: context,
+    style: alertStyle,
+    type: AlertType.success,
+    title: "Guardado exitoso",
+    desc: "El texto a sido guardado en Firebase",
+    buttons: [
+      DialogButton(
+        child: Text(
+          "COOL",
+          style: TextStyle(color: Colors.white, fontSize: 20),
+        ),
+        onPressed: () => Navigator.pop(context),
+        color: Color.fromRGBO(0, 179, 134, 1.0),
+        radius: BorderRadius.circular(0.0),
+      ),
+    ],
+  ).show();
 }
