@@ -117,7 +117,7 @@ Future<void> addUser(FirebaseUser user) async {
 
 Future<void> addDocument(FirebaseUser user, String text) async {
   Map<String, dynamic> map = {"Texto" : text, "Fecha " : DateTime.now(), "name" : user.displayName, "email" : user.email};
-  CollectionReference collectionReference = Firestore.instance.collection('Users');
+  CollectionReference collectionReference = Firestore.instance.collection('FileByUsers');
   QuerySnapshot document = await Firestore.instance.collection('Users').where("email", isEqualTo: user.email).getDocuments();
   var documents = document.documents;
   if (documents.isEmpty) {
