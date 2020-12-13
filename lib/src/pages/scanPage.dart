@@ -62,6 +62,16 @@ class _ScanPageState extends State<ScanPage> {
           buildTextList(
             context, 
             currentTextLabels
+          ),
+          RaisedButton.icon(
+            onPressed: (){},
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))
+            ),
+            label: Text("Guardar"),
+            icon: Icon(Icons.save),
+            color: Colors.lightBlueAccent,
+            splashColor: Colors.grey,
           )
         ],
       )

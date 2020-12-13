@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eyecontactapp/src/pages/homePage.dart';
 import 'package:eyecontactapp/src/pages/scanPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:local_auth/auth_strings.dart';
@@ -54,6 +56,7 @@ void signIn(BuildContext context, FirebaseAuth auth, GoogleSignIn googleSignIn) 
   );
   final AuthResult authResult = await auth.signInWithCredential(credential);
   FirebaseUser user = authResult.user;
+  addUser(user);
   print("signed in " + user.displayName);
   Navigator.pushReplacement(
     context, 
@@ -67,7 +70,11 @@ void signIn(BuildContext context, FirebaseAuth auth, GoogleSignIn googleSignIn) 
 }
 
 void signOut(GoogleSignIn googleSignIn){
-  googleSignIn.signOut();
+  googleSignIn.signOut().whenComplete(() => SystemChannels.platform.invokeMethod('SystemNavigator.pop'));
+}
+
+void signOutReturn(BuildContext context, FirebaseAuth auth, GoogleSignIn googleSignIn){
+  googleSignIn.signOut().whenComplete(() => signIn(context, auth, googleSignIn));
 }
 
 void onPickImageSelected(BuildContext context, GlobalKey<ScaffoldState> scaffoldKey, String source) async {
@@ -95,5 +102,25 @@ void onPickImageSelected(BuildContext context, GlobalKey<ScaffoldState> scaffold
     scaffold.showSnackBar(SnackBar(
       content: Text(e.toString()),
     ));
+  }
+}
+
+Future<void> addUser(FirebaseUser user) async {
+  Map<String, dynamic> map = {"id" : user.uid, "name" : user.displayName, "email" : user.email};
+  CollectionReference collectionReference = Firestore.instance.collection('Users');
+  QuerySnapshot document = await Firestore.instance.collection('Users').where("email", isEqualTo: user.email).getDocuments();
+  var documents = document.documents;
+  if (documents.isEmpty) {
+    collectionReference.add(map);
+  }
+}
+
+Future<void> addDocument(FirebaseUser user, String text) async {
+  Map<String, dynamic> map = {"Texto" : text, "Fecha " : DateTime.now(), "name" : user.displayName, "email" : user.email};
+  CollectionReference collectionReference = Firestore.instance.collection('Users');
+  QuerySnapshot document = await Firestore.instance.collection('Users').where("email", isEqualTo: user.email).getDocuments();
+  var documents = document.documents;
+  if (documents.isEmpty) {
+    collectionReference.add(map);
   }
 }
