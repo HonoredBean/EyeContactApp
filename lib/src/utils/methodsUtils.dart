@@ -73,7 +73,6 @@ void signIn(BuildContext context, FirebaseAuth auth, GoogleSignIn googleSignIn) 
   final AuthResult authResult = await auth.signInWithCredential(credential);
   FirebaseUser user = authResult.user;
   addUser(user);
-  print("signed in " + user.displayName);
   Navigator.pushReplacement(
     context, 
     MaterialPageRoute(
@@ -97,8 +96,6 @@ void onPickImageSelected(BuildContext context, FirebaseUser user, GlobalKey<Scaf
   var imageSource;
   if (source == "CAMERA_SOURCE") {
     imageSource = ImageSource.camera;
-  } else {
-    imageSource = ImageSource.gallery;
   }
 
   final scaffold = scaffoldKey.currentState;
@@ -131,7 +128,7 @@ void showInfo(BuildContext context){
     buttons: [
       DialogButton(
         child: Text(
-          "LO INTENTARE",
+          "OK",
           style: TextStyle(color: Colors.white, fontSize: 20),
         ),
         onPressed: () => Navigator.pop(context),
@@ -194,6 +191,5 @@ Future<void> getDocByUser(FirebaseUser user) async {
 String dateTime(DocumentSnapshot document){
   Timestamp time = document["Fecha"];
   DateTime date = time.toDate();
-  print(date.toString());
   return date.toString();
 }

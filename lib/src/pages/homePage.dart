@@ -53,12 +53,12 @@ class _HomePageState extends State<HomePage> {
             return ListView(
               padding: EdgeInsets.all(10),
               children: snapshot.data.documents.map((document){
-                return GestureDetector(
+                return InkWell(
                   onTap: (){
-
+                    
                   },
                   child: Card(
-                    color: Colors.blueGrey,
+                    color: Colors.lightBlue,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
-                                  image: AssetImage('assets/img/eyeContact.png')
+                                  image: AssetImage('assets/img/picTake.png')
                                 )
                               ),
                             ),
@@ -86,6 +86,7 @@ class _HomePageState extends State<HomePage> {
                                   child: Text(
                                     "Fecha: "+dateTime(document),
                                     style: TextStyle(
+                                      fontSize: 16,
                                       color: Colors.white
                                     ),
                                   ),
@@ -96,8 +97,10 @@ class _HomePageState extends State<HomePage> {
                                     child: Text(
                                       "Texto: \n"+document["Texto"], 
                                       overflow: TextOverflow.ellipsis,
-                                      softWrap: false,                                     
+                                      softWrap: false,        
+                                      maxLines: 6,                             
                                       style: TextStyle(
+                                        fontSize: 14,
                                         color: Colors.white
                                       ),
                                     ),
