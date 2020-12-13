@@ -79,6 +79,7 @@ Widget buildImage(PickedFile file, List<VisionText> currentTextLabels, BuildCont
     )
   );
 }
+
 Future<Size> getImageSize(Image image) {
   Completer<Size> completer = Completer<Size>();
   image.image.resolve(ImageConfiguration()).addListener(

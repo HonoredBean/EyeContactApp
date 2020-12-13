@@ -10,6 +10,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:local_auth/auth_strings.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:mlkit/mlkit.dart';
 
 Future <void> biometrico(BuildContext context ,bool bandera, LocalAuthentication auth) async {
   if(bandera){
@@ -41,9 +42,6 @@ Future <void> biometrico(BuildContext context ,bool bandera, LocalAuthentication
     } catch (e) {
       print(e);
     }
-    /*if(!mounted){
-      return; 
-    }*/
   }
 }
 
@@ -77,7 +75,7 @@ void signOutReturn(BuildContext context, FirebaseAuth auth, GoogleSignIn googleS
   googleSignIn.signOut().whenComplete(() => signIn(context, auth, googleSignIn));
 }
 
-void onPickImageSelected(BuildContext context, GlobalKey<ScaffoldState> scaffoldKey, String source) async {
+void onPickImageSelected(BuildContext context, FirebaseUser user, GlobalKey<ScaffoldState> scaffoldKey, String source) async {
   var imageSource;
   if (source == "CAMERA_SOURCE") {
     imageSource = ImageSource.camera;
@@ -96,7 +94,7 @@ void onPickImageSelected(BuildContext context, GlobalKey<ScaffoldState> scaffold
     Navigator.push(
       context,
       new MaterialPageRoute(
-          builder: (context) => ScanPage(file, _selectedScanner)),
+          builder: (context) => ScanPage(user, file, _selectedScanner)),
     );
   } catch (e) {
     scaffold.showSnackBar(SnackBar(
@@ -115,12 +113,17 @@ Future<void> addUser(FirebaseUser user) async {
   }
 }
 
-Future<void> addDocument(FirebaseUser user, String text) async {
-  Map<String, dynamic> map = {"Texto" : text, "Fecha " : DateTime.now(), "name" : user.displayName, "email" : user.email};
-  CollectionReference collectionReference = Firestore.instance.collection('FileByUsers');
+Future<void> addDoc(FirebaseUser user, List<VisionText> text) async {
+  String salidaTexto = "";
+  for (var item in text) {
+    salidaTexto += item.text;
+    print(item.text);
+  }
+  Map<String, dynamic> map = {"Texto" : salidaTexto, "Fecha " : DateTime.now(), "name" : user.displayName, "email" : user.email};
+  CollectionReference collectionReference = Firestore.instance.collection('FilesByUsers');
   QuerySnapshot document = await Firestore.instance.collection('Users').where("email", isEqualTo: user.email).getDocuments();
   var documents = document.documents;
-  if (documents.isEmpty) {
+  if (documents.isNotEmpty) {
     collectionReference.add(map);
   }
 }

@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                   Icons.add_a_photo
                 ),
               ),
-              onPressed: () => onPickImageSelected(context, scaffoldKey, "CAMERA_SOURCE"),
+              onPressed: () => onPickImageSelected(context, widget.authResult.user, scaffoldKey, "CAMERA_SOURCE"),
             ),
           ]
         ), 
