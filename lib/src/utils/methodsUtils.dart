@@ -13,6 +13,23 @@ import 'package:local_auth/local_auth.dart';
 import 'package:mlkit/mlkit.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
+var alertStyle = AlertStyle(
+  animationType: AnimationType.fromTop,
+  isCloseButton: false,
+  isOverlayTapDismiss: false,
+  descStyle: TextStyle(fontWeight: FontWeight.bold),
+  animationDuration: Duration(milliseconds: 400),
+  alertBorder: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(8.0),
+    side: BorderSide(
+      color: Colors.grey,
+    ),
+  ),
+  titleStyle: TextStyle(
+    color: Colors.red,
+  ),
+);
+
 Future <void> biometrico(BuildContext context ,bool bandera, LocalAuthentication auth) async {
   if(bandera){
     bool authenticated = false;
@@ -104,6 +121,27 @@ void onPickImageSelected(BuildContext context, FirebaseUser user, GlobalKey<Scaf
   }
 }
 
+void showInfo(BuildContext context){
+  Alert(
+    context: context,
+    style: alertStyle,
+    type: AlertType.info,
+    title: "Acerca de",
+    desc: "Para agregar fotos a tu Clipboard, presiona el boton con el icono de la camara",
+    buttons: [
+      DialogButton(
+        child: Text(
+          "LO INTENTARE",
+          style: TextStyle(color: Colors.white, fontSize: 20),
+        ),
+        onPressed: () => Navigator.pop(context),
+        color: Color.fromRGBO(0, 179, 134, 1.0),
+        radius: BorderRadius.circular(10),
+      ),
+    ],
+  ).show();
+}
+
 Future<void> addUser(FirebaseUser user) async {
   Map<String, dynamic> map = {"id" : user.uid, "name" : user.displayName, "email" : user.email};
   CollectionReference collectionReference = Firestore.instance.collection('Users');
@@ -120,30 +158,13 @@ Future<void> addDoc(BuildContext context, FirebaseUser user, List<VisionText> te
     salidaTexto += item.text;
     print(item.text);
   }
-  Map<String, dynamic> map = {"Texto" : salidaTexto, "Fecha " : DateTime.now(), "name" : user.displayName, "email" : user.email};
+  Map<String, dynamic> map = {"Texto" : salidaTexto, "Fecha" : DateTime.now(), "name" : user.displayName, "email" : user.email};
   CollectionReference collectionReference = Firestore.instance.collection('FilesByUsers');
   QuerySnapshot document = await Firestore.instance.collection('Users').where("email", isEqualTo: user.email).getDocuments();
   var documents = document.documents;
   if (documents.isNotEmpty) {
     collectionReference.add(map);
   }
-  var alertStyle = AlertStyle(
-    animationType: AnimationType.fromTop,
-    isCloseButton: false,
-    isOverlayTapDismiss: false,
-    descStyle: TextStyle(fontWeight: FontWeight.bold),
-    animationDuration: Duration(milliseconds: 400),
-    alertBorder: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(0.0),
-      side: BorderSide(
-        color: Colors.grey,
-      ),
-    ),
-    titleStyle: TextStyle(
-      color: Colors.red,
-    ),
-  );
-
   Alert(
     context: context,
     style: alertStyle,
@@ -153,7 +174,7 @@ Future<void> addDoc(BuildContext context, FirebaseUser user, List<VisionText> te
     buttons: [
       DialogButton(
         child: Text(
-          "COOL",
+          "Gracias",
           style: TextStyle(color: Colors.white, fontSize: 20),
         ),
         onPressed: () => Navigator.pop(context),
@@ -162,4 +183,17 @@ Future<void> addDoc(BuildContext context, FirebaseUser user, List<VisionText> te
       ),
     ],
   ).show();
+}
+
+Future<void> getDocByUser(FirebaseUser user) async {
+  QuerySnapshot document = await Firestore.instance.collection('FilesByUsers').where("email", isEqualTo: user.email).getDocuments();
+  var documents = document.documents;
+  print(documents);
+}
+
+String dateTime(DocumentSnapshot document){
+  Timestamp time = document["Fecha"];
+  DateTime date = time.toDate();
+  print(date.toString());
+  return date.toString();
 }

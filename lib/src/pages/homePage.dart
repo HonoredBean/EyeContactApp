@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eyecontactapp/src/utils/methodsUtils.dart';
 import 'package:eyecontactapp/src/widgets/menuWidget.dart';
 import 'package:flutter/material.dart';
@@ -36,8 +37,8 @@ class _HomePageState extends State<HomePage> {
           widget.authResult, 
           widget.googleSignIn
         ),
-        /*body: StreamBuilder(
-          stream: Firestore.instance.collection("FilesByUsers").snapshots(),
+        body: StreamBuilder(
+          stream: Firestore.instance.collection("FilesByUsers").where("email", isEqualTo: widget.authResult.user.email).snapshots(),
           builder: (context,AsyncSnapshot<QuerySnapshot>snapshot){
             if (!snapshot.hasData) {
               return Column(
@@ -50,23 +51,75 @@ class _HomePageState extends State<HomePage> {
               );
             }
             return ListView(
+              padding: EdgeInsets.all(10),
               children: snapshot.data.documents.map((document){
-                return Center(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width/1.2,
-                    height: MediaQuery.of(context).size.height/6,
-                    child: Text("Nombre: "+document["name"]),
+                return GestureDetector(
+                  onTap: (){
+
+                  },
+                  child: Card(
+                    color: Colors.blueGrey,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: AssetImage('assets/img/eyeContact.png')
+                                )
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(6.0),
+                                  child: Text(
+                                    "Fecha: "+dateTime(document),
+                                    style: TextStyle(
+                                      color: Colors.white
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(6.0),
+                                  child: Container(
+                                    child: Text(
+                                      "Texto: \n"+document["Texto"], 
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: false,                                     
+                                      style: TextStyle(
+                                        color: Colors.white
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 );
               }).toList(),
             );
           },
-        )*/
+        ),
         floatingActionButton: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             FloatingActionButton(
-              heroTag: "ht2",
+              heroTag: "ht1",
               backgroundColor: Colors.black45,
               child: CircleAvatar(
                 backgroundColor: Colors.white,
@@ -75,6 +128,9 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               onPressed: () => onPickImageSelected(context, widget.authResult.user, scaffoldKey, "CAMERA_SOURCE"),
+            ),
+            Padding(
+              padding: EdgeInsets.all(5),
             ),
           ]
         ), 

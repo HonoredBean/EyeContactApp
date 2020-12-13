@@ -16,6 +16,7 @@ Drawer menuDrawer(BuildContext context, AuthResult authResult, GoogleSignIn goog
             googleSignIn, 
             0
           ),
+          Divider(),
           itemList(
             context,
             "Cambiar de cuenta", 
@@ -23,6 +24,15 @@ Drawer menuDrawer(BuildContext context, AuthResult authResult, GoogleSignIn goog
             googleSignIn, 
             1
           ),
+          Divider(),
+          itemList(
+            context,
+            "Informacion", 
+            Icon(Icons.info), 
+            googleSignIn, 
+            3
+          ),
+          Divider(),
           itemList(
             context,
             "Salir", 
@@ -30,6 +40,7 @@ Drawer menuDrawer(BuildContext context, AuthResult authResult, GoogleSignIn goog
             googleSignIn, 
             2
           ),
+          Divider(),
         ],
       ),
     ),
@@ -78,6 +89,9 @@ Widget itemList(BuildContext context,String text, Icon icono, GoogleSignIn googl
         break;
         case 2:
           signOut(googleSignIn);
+        break;
+        case 3:
+          showInfo(context);
         break;
         default:
       }
