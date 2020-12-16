@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
               children: snapshot.data.documents.map((document){
                 return InkWell(
                   onTap: (){
-                    
+                    updateData(context, document);
                   },
                   child: Card(
                     color: Colors.lightBlue,

@@ -189,7 +189,49 @@ Future<void> getDocByUser(FirebaseUser user) async {
 }
 
 String dateTime(DocumentSnapshot document){
+  String yy,mm,dd;
   Timestamp time = document["Fecha"];
   DateTime date = time.toDate();
-  return date.toString();
+  yy = date.year.toString();
+  mm = date.month.toString();
+  dd = date.day.toString();
+  return yy+"/"+mm+"/"+dd;
+}
+
+void updateData(BuildContext context, DocumentSnapshot document){
+TextEditingController controller = TextEditingController()..text = document["Texto"];
+Alert(
+    context: context,
+    style: alertStyle,
+    type: AlertType.warning,
+    title: "Realizar cambios?",
+    desc: "Selecciona el campo para cambiar el texto",
+    content: Column(
+      children: [
+        Text(
+          "Fecha: "+ dateTime(document)
+        ),
+        TextField(
+          controller: controller,
+          maxLines: null,
+          keyboardType: TextInputType.multiline,
+          decoration: InputDecoration(
+            icon: Icon(Icons.update),
+            labelText: "Texto",
+          ),
+        ),
+      ],
+    ),
+    buttons: [
+      DialogButton(
+        child: Text(
+          "Actualizar",
+          style: TextStyle(color: Colors.white, fontSize: 20),
+        ),
+        onPressed: () => Navigator.pop(context),
+        color: Color.fromRGBO(0, 179, 134, 1.0),
+        radius: BorderRadius.circular(0.0),
+      ),
+    ],
+  ).show();
 }
