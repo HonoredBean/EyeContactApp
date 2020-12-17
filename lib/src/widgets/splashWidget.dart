@@ -1,6 +1,11 @@
+//-----------------------------------------------------------------------------------------
+//Importes obtenidos en la paqueteria para obtener las funciones necesarias
+//-----------------------------------------------------------------------------------------
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-
+//-----------------------------------------------------------------------------------------
+//Widget que muestra el LottieFile (Logo) junto a los diversos textos en el splash
+//-----------------------------------------------------------------------------------------
 Widget splashWidget(BuildContext context){
   return Scaffold(
     body: Container(
@@ -28,7 +33,9 @@ Widget splashWidget(BuildContext context){
     ),
   );
 }
-
+//-----------------------------------------------------------------------------------------
+//Widget para mostrar los titulos de la aplicacion en el splashscreen. Estilo personalizado
+//-----------------------------------------------------------------------------------------
 Widget titleSplash(String text, Color colorTexto, double tamTexto){
   return Container(
     padding: EdgeInsets.only(bottom: 10),
@@ -43,3 +50,4 @@ Widget titleSplash(String text, Color colorTexto, double tamTexto){
     ),
   );
 }
+//-----------------------------------------------------------------------------------------

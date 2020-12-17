@@ -1,11 +1,15 @@
+//-----------------------------------------------------------------------------------------
+//Importes obtenidos en la paqueteria para obtener las funciones necesarias
+//-----------------------------------------------------------------------------------------
 import 'dart:async';
 import 'dart:io';
-
 import 'package:eyecontactapp/src/class/textClass.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mlkit/mlkit.dart';
-
+//-----------------------------------------------------------------------------------------
+//Widget para construir una lista de texto proveniente del escaneo de la fotografia tomada
+//-----------------------------------------------------------------------------------------
 Widget buildTextList(BuildContext context, List<VisionText> texts) {
   if (texts.length == 0) {
     return Expanded(
@@ -32,7 +36,9 @@ Widget buildTextList(BuildContext context, List<VisionText> texts) {
     ),
   );
 }
-
+//-----------------------------------------------------------------------------------------
+//Widget para construir lineas de texto proveniente del escaneo de la fotografia tomada
+//-----------------------------------------------------------------------------------------
 Widget buildTextRow(text) {
   return ListTile(
     title: Text(
@@ -45,7 +51,9 @@ Widget buildTextRow(text) {
     dense: true,
   );
 }
-
+//-----------------------------------------------------------------------------------------
+//Widget para construir la fotografia tomada, tomando en cuenta la validacion de la foto
+//-----------------------------------------------------------------------------------------
 Widget buildImage(PickedFile file, List<VisionText> currentTextLabels, BuildContext context) {
   return Container(
     height: MediaQuery.of(context).size.height/2,
@@ -79,7 +87,9 @@ Widget buildImage(PickedFile file, List<VisionText> currentTextLabels, BuildCont
     )
   );
 }
-
+//-----------------------------------------------------------------------------------------
+//Widget para construir el tamaño de la fotografia tomada
+//-----------------------------------------------------------------------------------------
 Future<Size> getImageSize(Image image) {
   Completer<Size> completer = Completer<Size>();
   image.image.resolve(ImageConfiguration()).addListener(
@@ -94,3 +104,4 @@ Future<Size> getImageSize(Image image) {
   );
   return completer.future;
 }
+//-----------------------------------------------------------------------------------------

@@ -1,15 +1,20 @@
+//-----------------------------------------------------------------------------------------
+//Importes obtenidos en la paqueteria para obtener las funciones necesarias
+//-----------------------------------------------------------------------------------------
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-
 import 'package:eyecontactapp/src/widgets/splashWidget.dart';
 import 'package:eyecontactapp/src/pages/logInPage.dart';
-
+//-----------------------------------------------------------------------------------------
+//Importes obtenidos en la paqueteria para obtener las funciones necesarias
+//-----------------------------------------------------------------------------------------
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
-
+//-----------------------------------------------------------------------------------------
+//Importes obtenidos en la paqueteria para obtener las funciones necesarias
+//-----------------------------------------------------------------------------------------
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
@@ -28,3 +33,4 @@ class _SplashScreenState extends State<SplashScreen> {
     return splashWidget(context);
   }
 }
+//-----------------------------------------------------------------------------------------

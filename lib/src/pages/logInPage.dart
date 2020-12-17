@@ -1,12 +1,19 @@
+//-----------------------------------------------------------------------------------------
+//Importes obtenidos en la paqueteria para obtener las funciones necesarias
+//-----------------------------------------------------------------------------------------
 import 'package:eyecontactapp/src/utils/methodsUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
-
+//-----------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
-
+//-----------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------
 class _LoginPageState extends State<LoginPage> {
   bool bandera = true;
   final LocalAuthentication auth = LocalAuthentication(); 
@@ -20,3 +27,4 @@ class _LoginPageState extends State<LoginPage> {
     return Container();
   }
 }
+//-----------------------------------------------------------------------------------------

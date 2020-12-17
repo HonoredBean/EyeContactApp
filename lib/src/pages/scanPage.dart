@@ -1,12 +1,16 @@
+//-----------------------------------------------------------------------------------------
+//Importes obtenidos en la paqueteria para obtener las funciones necesarias
+//-----------------------------------------------------------------------------------------
 import 'dart:async';
-
 import 'package:eyecontactapp/src/utils/methodsUtils.dart';
 import 'package:eyecontactapp/src/widgets/scanWidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mlkit/mlkit.dart';
-
+//-----------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------
 class ScanPage extends StatefulWidget {
   ScanPage(this.user, this.file, this.selectedScanner);
   final PickedFile file;
@@ -15,7 +19,9 @@ class ScanPage extends StatefulWidget {
   @override
   _ScanPageState createState() => _ScanPageState();
 }
-
+//-----------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------
 class _ScanPageState extends State<ScanPage> {
   FirebaseVisionTextDetector textDetector = FirebaseVisionTextDetector.instance;
   List<VisionText> currentTextLabels = <VisionText>[];
@@ -32,6 +38,9 @@ class _ScanPageState extends State<ScanPage> {
     super.dispose();
     subscription?.cancel();
   }
+  //-----------------------------------------------------------------------------------------
+  //
+  //-----------------------------------------------------------------------------------------
   void analyzeLabels() async {
     try {
       var currentLabels;
@@ -82,3 +91,4 @@ class _ScanPageState extends State<ScanPage> {
     );
   }
 }
+//-----------------------------------------------------------------------------------------

@@ -1,5 +1,7 @@
+//-----------------------------------------------------------------------------------------
+//Importes obtenidos en la paqueteria para obtener las funciones necesarias
+//-----------------------------------------------------------------------------------------
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eyecontactapp/src/pages/homePage.dart';
 import 'package:eyecontactapp/src/pages/scanPage.dart';
@@ -12,7 +14,9 @@ import 'package:local_auth/auth_strings.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:mlkit/mlkit.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-
+//-----------------------------------------------------------------------------------------
+//Variable para el estilo de las alertas mostradas en la aplicacion
+//-----------------------------------------------------------------------------------------
 var alertStyle = AlertStyle(
   animationType: AnimationType.fromTop,
   isCloseButton: false,
@@ -29,7 +33,9 @@ var alertStyle = AlertStyle(
     color: Colors.red,
   ),
 );
-
+//-----------------------------------------------------------------------------------------
+//Metodo para tomar la lectura de la huella digital registrada en el movil
+//-----------------------------------------------------------------------------------------
 Future <void> biometrico(BuildContext context ,bool bandera, LocalAuthentication auth) async {
   if(bandera){
     bool authenticated = false;
@@ -62,8 +68,11 @@ Future <void> biometrico(BuildContext context ,bool bandera, LocalAuthentication
     }
   }
 }
-
-void signIn(BuildContext context, FirebaseAuth auth, GoogleSignIn googleSignIn) async{
+//-----------------------------------------------------------------------------------------
+//Metodo para iniciar sesion utilizando la autenticacion en Firebase usando una cuenta 
+//asociada a Google
+//-----------------------------------------------------------------------------------------
+Future<void> signIn(BuildContext context, FirebaseAuth auth, GoogleSignIn googleSignIn) async{
   GoogleSignInAccount googleUser = await googleSignIn.signIn();
   GoogleSignInAuthentication googleAuth = await googleUser.authentication;
   final AuthCredential credential = GoogleAuthProvider.getCredential(
@@ -83,21 +92,30 @@ void signIn(BuildContext context, FirebaseAuth auth, GoogleSignIn googleSignIn) 
     )
   );
 }
-
+//-----------------------------------------------------------------------------------------
+//Metodo para cerrar sesion y cerrar la aplicacion por medio de la invocacion a 
+//"SystemNavigator.pop"
+//-----------------------------------------------------------------------------------------
 void signOut(GoogleSignIn googleSignIn){
   googleSignIn.signOut().whenComplete(() => SystemChannels.platform.invokeMethod('SystemNavigator.pop'));
 }
-
+//-----------------------------------------------------------------------------------------
+//Metodo para cerrar sesion y cerrar la aplicacion por medio de la invocacion a 
+//"SystemNavigator.pop" pero con la diferencia que aun esta dentro de la aplicacion y podra
+//iniciar sesion en otra cuenta si asi lo desea el usuario
+//-----------------------------------------------------------------------------------------
 void signOutReturn(BuildContext context, FirebaseAuth auth, GoogleSignIn googleSignIn){
   googleSignIn.signOut().whenComplete(() => signIn(context, auth, googleSignIn));
 }
-
+//-----------------------------------------------------------------------------------------
+//Metodo para tomar la fotografia tomada, donde se tendra que validar la existencia de la
+//misma y luego mandarla a otra pantalla para realizar el procedimiento de escaneo de texto
+//-----------------------------------------------------------------------------------------
 void onPickImageSelected(BuildContext context, FirebaseUser user, GlobalKey<ScaffoldState> scaffoldKey, String source) async {
   var imageSource;
   if (source == "CAMERA_SOURCE") {
     imageSource = ImageSource.camera;
   }
-
   final scaffold = scaffoldKey.currentState;
   final picker = ImagePicker();
   try {
@@ -117,7 +135,9 @@ void onPickImageSelected(BuildContext context, FirebaseUser user, GlobalKey<Scaf
     ));
   }
 }
-
+//-----------------------------------------------------------------------------------------
+//Metodo para mostrar la alerta de "Informacion" de la aplicacion
+//-----------------------------------------------------------------------------------------
 void showInfo(BuildContext context){
   Alert(
     context: context,
@@ -138,7 +158,11 @@ void showInfo(BuildContext context){
     ],
   ).show();
 }
-
+//-----------------------------------------------------------------------------------------
+//Metodo para agregar un usuario dentro de la BD de Firebase (CloudFirebase) en la cual 
+//iria a la coleccion de "Users" tomando un arreglo con su id, nombre y su email. 
+//Si este ya se encuentra validado no se registrara nuevamente en la BD
+//-----------------------------------------------------------------------------------------
 Future<void> addUser(FirebaseUser user) async {
   Map<String, dynamic> map = {"id" : user.uid, "name" : user.displayName, "email" : user.email};
   CollectionReference collectionReference = Firestore.instance.collection('Users');
@@ -148,7 +172,13 @@ Future<void> addUser(FirebaseUser user) async {
     collectionReference.add(map);
   }
 }
-
+//-----------------------------------------------------------------------------------------
+//Metodo para agregar un documento (Texto escaneado de una foto) a la BD de Firebase 
+//(CloudFirebase) donde se asociara a una variable de tipo cadena y esta iria a la
+//coleccion "FilesByUsers" donde se registrara por medio de la fecha (Fecha en que se tomo)
+//, el nombre del usuario y el email del mismo, para despues mostrar una alerta de guardado
+//si la accion fue exitosa 
+//-----------------------------------------------------------------------------------------
 Future<void> addDoc(BuildContext context, FirebaseUser user, List<VisionText> text) async {
   String salidaTexto = "";
   for (var item in text) {
@@ -161,33 +191,30 @@ Future<void> addDoc(BuildContext context, FirebaseUser user, List<VisionText> te
   var documents = document.documents;
   if (documents.isNotEmpty) {
     collectionReference.add(map);
-  }
-  Alert(
-    context: context,
-    style: alertStyle,
-    type: AlertType.success,
-    title: "Guardado exitoso",
-    desc: "El texto a sido guardado en Firebase",
-    buttons: [
-      DialogButton(
-        child: Text(
-          "Gracias",
-          style: TextStyle(color: Colors.white, fontSize: 20),
+    Alert(
+      context: context,
+      style: alertStyle,
+      type: AlertType.success,
+      title: "Guardado exitoso",
+      desc: "El texto a sido guardado en Firebase",
+      buttons: [
+        DialogButton(
+          child: Text(
+            "Gracias",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+          color: Color.fromRGBO(0, 179, 134, 1.0),
+          radius: BorderRadius.circular(0.0),
         ),
-        onPressed: () => Navigator.pop(context),
-        color: Color.fromRGBO(0, 179, 134, 1.0),
-        radius: BorderRadius.circular(0.0),
-      ),
-    ],
-  ).show();
+      ],
+    ).show();
+  }
 }
-
-Future<void> getDocByUser(FirebaseUser user) async {
-  QuerySnapshot document = await Firestore.instance.collection('FilesByUsers').where("email", isEqualTo: user.email).getDocuments();
-  var documents = document.documents;
-  print(documents);
-}
-
+//-----------------------------------------------------------------------------------------
+//Metodo para convertir la fecha del documento (La cual viene en nano y mili segundos) y 
+//este mismo lo regresa en forma de una cadena
+//-----------------------------------------------------------------------------------------
 String dateTime(DocumentSnapshot document){
   String yy,mm,dd;
   Timestamp time = document["Fecha"];
@@ -197,8 +224,14 @@ String dateTime(DocumentSnapshot document){
   dd = date.day.toString();
   return yy+"/"+mm+"/"+dd;
 }
-
-void updateData(BuildContext context, DocumentSnapshot document){
+//-----------------------------------------------------------------------------------------
+//Metodo para actualizar el documento (Texto), si este fue modificado por el usuario.
+//Este metodo se encargara de mostrar una alerta donde mostrara lo necesario, tambien las
+//opciones para el usuario, para actualizar el campo de texto.
+//Si se presiona "actualizar" se mandara una solicitud a Firebase para que actualice el
+//campo "Texto" y si no es asi solamente se saldra de la alerta
+//-----------------------------------------------------------------------------------------
+Future<void> updateData(BuildContext context, DocumentSnapshot document) async {
 TextEditingController controller = TextEditingController()..text = document["Texto"];
 Alert(
     context: context,
@@ -247,7 +280,10 @@ Alert(
     ],
   ).show();
 }
-
+//-----------------------------------------------------------------------------------------
+//Metodo para actualizar el documento si se presiono el boton de "actualizar" de su 
+//respectiva alerta, el cambio se realizara en la coleccion llamada "FilesByUsers"
+//-----------------------------------------------------------------------------------------
 Future<void> updateText(Timestamp date, TextEditingController controller) async {
   CollectionReference collectionReference = Firestore.instance.collection("FilesByUsers");
   QuerySnapshot querySnapshot = await collectionReference.where("Fecha", isEqualTo: date).getDocuments();
@@ -255,8 +291,14 @@ Future<void> updateText(Timestamp date, TextEditingController controller) async 
       querySnapshot.documents[0].reference.updateData({"Texto":controller.text});
   }
 }
-
-void deleteData(BuildContext context, DocumentSnapshot document){
+//-----------------------------------------------------------------------------------------
+//Metodo para eliminar el documento (Texto), si el usuario dejo presionado el dedo en una
+//tarjeta. Este metodo se encargara de mostrar una alerta donde mostrara lo necesario, 
+//tambien las opciones para el usuario, para eliminar el documento.
+//Si se presiona "Eliminar" se mandara una solicitud a Firebase para que elimine el 
+//documento y si no es asi solamente se saldra de la alerta
+//-----------------------------------------------------------------------------------------
+Future<void> deleteData(BuildContext context, DocumentSnapshot document) async {
 TextEditingController controller = TextEditingController()..text = document["Texto"];
 Alert(
     context: context,
@@ -305,7 +347,10 @@ Alert(
     ],
   ).show();
 }
-
+//-----------------------------------------------------------------------------------------
+//Metodo para eliminar el documento si se presiono el boton de "eliminar" de su 
+//respectiva alerta, el cambio se realizara en la coleccion llamada "FilesByUsers"
+//-----------------------------------------------------------------------------------------
 Future<void> deleteText(Timestamp date, TextEditingController controller) async {
   CollectionReference collectionReference = Firestore.instance.collection("FilesByUsers");
   QuerySnapshot querySnapshot = await collectionReference.where("Fecha", isEqualTo: date).getDocuments();
@@ -313,3 +358,4 @@ Future<void> deleteText(Timestamp date, TextEditingController controller) async 
       querySnapshot.documents[0].reference.delete();
   }
 }
+//-----------------------------------------------------------------------------------------

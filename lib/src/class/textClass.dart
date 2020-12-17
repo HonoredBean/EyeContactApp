@@ -1,5 +1,11 @@
+//-----------------------------------------------------------------------------------------
+//Importes obtenidos en la paqueteria para obtener las funciones necesarias
+//-----------------------------------------------------------------------------------------
 import 'package:flutter/material.dart';
 import 'package:mlkit/mlkit.dart';
+//-----------------------------------------------------------------------------------------
+//Clase la cual servira para la decoracion del texto escaneado dentro de la foto tomada
+//-----------------------------------------------------------------------------------------
 class TextDetectDecoration extends Decoration {
   final Size _originalImageSize;
   final List<VisionText> _texts;
@@ -12,6 +18,10 @@ class TextDetectDecoration extends Decoration {
     return _TextDetectPainter(_texts, _originalImageSize);
   }
 }
+//-----------------------------------------------------------------------------------------
+//Clase que dibujara los recuadros para los textos escaneados, haciendolos vistosos y asi
+//notarlos mejor en la foto tomada
+//-----------------------------------------------------------------------------------------
 class _TextDetectPainter extends BoxPainter {
   final List<VisionText> _texts;
   final Size _originalImageSize;
@@ -39,3 +49,4 @@ class _TextDetectPainter extends BoxPainter {
     canvas.restore();
   }
 }
+//-----------------------------------------------------------------------------------------
