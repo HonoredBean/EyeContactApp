@@ -132,7 +132,7 @@ void showInfo(BuildContext context){
           style: TextStyle(color: Colors.white, fontSize: 20),
         ),
         onPressed: () => Navigator.pop(context),
-        color: Color.fromRGBO(0, 179, 134, 1.0),
+        color: Colors.lightBlue,
         radius: BorderRadius.circular(10),
       ),
     ],
@@ -228,10 +228,88 @@ Alert(
           "Actualizar",
           style: TextStyle(color: Colors.white, fontSize: 20),
         ),
-        onPressed: () => Navigator.pop(context),
+        onPressed: (){
+          updateText(document["Fecha"], controller);
+          Navigator.pop(context);
+        },
         color: Color.fromRGBO(0, 179, 134, 1.0),
-        radius: BorderRadius.circular(0.0),
+        radius: BorderRadius.circular(10)
+      ),
+      DialogButton(
+        child: Text(
+          "Cancelar",
+          style: TextStyle(color: Colors.white, fontSize: 20),
+        ),
+        onPressed: () => Navigator.pop(context),
+        color: Colors.red,
+        radius: BorderRadius.circular(10)
       ),
     ],
   ).show();
+}
+
+Future<void> updateText(Timestamp date, TextEditingController controller) async {
+  CollectionReference collectionReference = Firestore.instance.collection("FilesByUsers");
+  QuerySnapshot querySnapshot = await collectionReference.where("Fecha", isEqualTo: date).getDocuments();
+  if(querySnapshot.documents.isNotEmpty){
+      querySnapshot.documents[0].reference.updateData({"Texto":controller.text});
+  }
+}
+
+void deleteData(BuildContext context, DocumentSnapshot document){
+TextEditingController controller = TextEditingController()..text = document["Texto"];
+Alert(
+    context: context,
+    style: alertStyle,
+    type: AlertType.error,
+    title: "Desea eliminar este documento?",
+    content: Column(
+      children: [
+        Text(
+          "Fecha: "+ dateTime(document)
+        ),
+        TextField(
+          controller: controller,
+          maxLines: null,
+          enabled: false,
+          keyboardType: TextInputType.multiline,
+          decoration: InputDecoration(
+            icon: Icon(Icons.update),
+            labelText: "Texto",
+          ),
+        ),
+      ],
+    ),
+    buttons: [
+      DialogButton(
+        child: Text(
+          "Eliminar",
+          style: TextStyle(color: Colors.white, fontSize: 20),
+        ),
+        onPressed: (){
+          deleteText(document["Fecha"], controller);
+          Navigator.pop(context);
+        },
+        color: Color.fromRGBO(0, 179, 134, 1.0),
+        radius: BorderRadius.circular(10)
+      ),
+      DialogButton(
+        child: Text(
+          "Cancelar",
+          style: TextStyle(color: Colors.white, fontSize: 20),
+        ),
+        onPressed: () => Navigator.pop(context),
+        color: Colors.red,
+        radius: BorderRadius.circular(10)
+      ),
+    ],
+  ).show();
+}
+
+Future<void> deleteText(Timestamp date, TextEditingController controller) async {
+  CollectionReference collectionReference = Firestore.instance.collection("FilesByUsers");
+  QuerySnapshot querySnapshot = await collectionReference.where("Fecha", isEqualTo: date).getDocuments();
+  if(querySnapshot.documents.isNotEmpty){
+      querySnapshot.documents[0].reference.delete();
+  }
 }

@@ -57,6 +57,9 @@ class _HomePageState extends State<HomePage> {
                   onTap: (){
                     updateData(context, document);
                   },
+                  onLongPress: (){
+                    deleteData(context, document);
+                  },
                   child: Card(
                     color: Colors.lightBlue,
                     child: Padding(
