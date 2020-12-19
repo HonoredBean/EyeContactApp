@@ -9,7 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mlkit/mlkit.dart';
 //-----------------------------------------------------------------------------------------
-//
+//Pagina de escaneo de texto de la imagen tomada anteriormente, obtendra los parametros:
+//file            -> Foto tomada
+//selectedScanner -> Validacion
+//user            -> Usuario logeado
 //-----------------------------------------------------------------------------------------
 class ScanPage extends StatefulWidget {
   ScanPage(this.user, this.file, this.selectedScanner);
@@ -20,7 +23,7 @@ class ScanPage extends StatefulWidget {
   _ScanPageState createState() => _ScanPageState();
 }
 //-----------------------------------------------------------------------------------------
-//
+//Pagina donde mostrara la foto tomada, el texto y la opcion de guardado
 //-----------------------------------------------------------------------------------------
 class _ScanPageState extends State<ScanPage> {
   FirebaseVisionTextDetector textDetector = FirebaseVisionTextDetector.instance;
@@ -39,7 +42,7 @@ class _ScanPageState extends State<ScanPage> {
     subscription?.cancel();
   }
   //-----------------------------------------------------------------------------------------
-  //
+  //Metodo donde obtendra la direccion de la fotografia para asi realizar el escaneo
   //-----------------------------------------------------------------------------------------
   void analyzeLabels() async {
     try {
@@ -74,20 +77,27 @@ class _ScanPageState extends State<ScanPage> {
             context, 
             currentTextLabels
           ),
-          RaisedButton.icon(
-            onPressed: (){
-              addDoc(context, widget.user, currentTextLabels);
-            },
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))
-            ),
-            label: Text("Guardar"),
-            icon: Icon(Icons.save),
-            color: Colors.lightBlueAccent,
-            splashColor: Colors.grey,
-          )
         ],
-      )
+      ),
+      floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              heroTag: "ht1",
+              backgroundColor: Colors.black45,
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Icon(
+                  Icons.save
+                ),
+              ),
+              onPressed: () => addDoc(context, widget.user, currentTextLabels),
+            ),
+            Padding(
+              padding: EdgeInsets.all(5),
+            ),
+          ]
+        ),
     );
   }
 }

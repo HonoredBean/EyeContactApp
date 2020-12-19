@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 //-----------------------------------------------------------------------------------------
-//
+//Pagina principal, esta obtendra los parametros:
+//googleSignIn  -> Validacion que entro con cuenta google
+//authResult    -> Datos provenientes del usuario
 //-----------------------------------------------------------------------------------------
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.googleSignIn, this.authResult} ): super(key: key);
@@ -18,7 +20,8 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 //-----------------------------------------------------------------------------------------
-//
+//Pagina que mostrara el contenido principal de la aplicacion mostrando el listado de las
+//tarjetas, si se encuentran textos escaneados anteriormente por el usuario
 //-----------------------------------------------------------------------------------------
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();

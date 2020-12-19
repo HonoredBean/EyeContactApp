@@ -13,7 +13,7 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 //-----------------------------------------------------------------------------------------
-//Importes obtenidos en la paqueteria para obtener las funciones necesarias
+//Pagina del SplashScreen
 //-----------------------------------------------------------------------------------------
 class _SplashScreenState extends State<SplashScreen> {
   @override
