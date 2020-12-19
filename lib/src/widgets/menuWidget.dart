@@ -1,3 +1,9 @@
+/*
+    Asignatura: Inteligencia Artificial
+    Unidad:     RNA
+    Autores:    Espeleta Mireles Krisan Jared  -  16130802
+                Carranco Cataño Alfredo        -  15131297
+*/
 //-----------------------------------------------------------------------------------------
 //Importes obtenidos en la paqueteria para obtener las funciones necesarias
 //-----------------------------------------------------------------------------------------
